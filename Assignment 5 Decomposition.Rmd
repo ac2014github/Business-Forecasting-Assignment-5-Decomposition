@@ -1,0 +1,44 @@
+---
+title: "Assignment 5 Decomposition"
+author: "Adrian Chan"
+date: "2024-10-10"
+output: html_document
+---
+
+```{r}
+library(fpp)
+library(fpp2)
+library(readxl)
+
+Quarterly_Costco_Sales_2002_to_Present<-read_excel("C:/Users/Adrian/Documents/Business Forecasting/Quarterly Costco Sales 2002 to Present.xlsx")
+
+sales_ts<-ts(Quarterly_Costco_Sales_2002_to_Present$`Sales (in billions)`,start=c(2002,1),frequency=4)
+
+Quarterly_Costco_Sales_2002_to_Present$'Year and  Quarter' <- paste(Quarterly_Costco_Sales_2002_to_Present$`Fiscal year`,"Q",Quarterly_Costco_Sales_2002_to_Present$Quarter)
+
+plot(sales_ts)
+
+stl_decomp <- stl(sales_ts, s.window = "periodic")
+plot(stl_decomp)
+
+attributes(stl_decomp)
+
+seasadj(stl_decomp)
+
+plot(sales_ts)
+lines(seasadj(stl_decomp),col="blue")
+
+f_stl<-forecast(stl_decomp)
+
+f_stl<-forecast(stl_decomp,h=12)
+f_stl
+
+plot(f_stl)
+
+decomp_sales<-decompose(sales_ts)
+attributes(decomp_sales)
+
+seasadj(decomp_sales)
+
+```
+
